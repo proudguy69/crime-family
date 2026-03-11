@@ -17,18 +17,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get('/authorize')
-async def authorize(code:str):
-    if not code:
-        return success(False, 'No code provided in url')
-    
+@app.get('/authorize/discord')
+async def discord_auth(code:str):
     data:dict = await discord_exchange_code(code)
+    if not (data.get('access_token')):
+        return success(False, message="Failed to obtain access token", data=data)
     user = await get_discord_user(data.get('access_token'))
     return user
 
 @app.get('/authorize/roblox')
 async def roblox_auth(code):
     data:dict = await roblox_exchange_code(code)
+    if not (data.get('access_token')):
+        return success(False, message="Failed to obtain access token", data=data)
     user = await get_roblox_user(data.get('access_token'))
     
     return user

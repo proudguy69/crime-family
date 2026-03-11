@@ -6,11 +6,11 @@ roblox_api = 'https://apis.roblox.com/oauth'
 redirect_uris = {
     'dev': '',
     'prod': '',
-    'dev_server': 'http://localhost:8000/authorize',
-    'roblox': 'http://localhost:8000/authorize/roblox'
+    'discord_dev': 'http://localhost:8000/authorize/discord',
+    'roblox_dev': 'http://localhost:8000/authorize/roblox'
 }
-discord_redirect = redirect_uris['dev_server']
-roblox_redirect = redirect_uris['roblox']
+discord_redirect = redirect_uris['discord_dev']
+roblox_redirect = redirect_uris['roblox_dev']
 
 def success(state:bool=True, message:str=None, data:dict=None):
     response = {'success': state}
