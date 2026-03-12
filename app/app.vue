@@ -3,3 +3,7 @@
     <NuxtPage />
   </UApp>
 </template>
+
+<script>
+
+</script>

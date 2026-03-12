@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from aiohttp import ClientSession
+from tortoise.contrib.fastapi import register_tortoise
+from models import *
 from helpers import *
 
 origins = [
@@ -8,6 +9,13 @@ origins = [
 ]
 
 app = FastAPI()
+
+register_tortoise(
+    app,
+    db_url="sqlite://database.sqlite3",
+    modules={"models":['models']},
+    generate_schemas=True
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,17 +27,24 @@ app.add_middleware(
 
 @app.get('/authorize/discord')
 async def discord_auth(code:str):
-    data:dict = await discord_exchange_code(code)
-    if not (data.get('access_token')):
-        return success(False, message="Failed to obtain access token", data=data)
-    user = await get_discord_user(data.get('access_token'))
-    return user
+    shallow_auth:ShallowAuth = await discord_exchange_code(code)
+    if not shallow_auth:
+        return success(False, message="Failed to obtain access token")
+    user_data = await get_discord_user(shallow_auth.access_token)
+    shallow_user = await User.get_or_none(discord_id=user_data.id).prefetch_related('auth')
+    if shallow_user:
+        auths:list[Authentication] = await shallow_user.auth.all()
+        auth = auths[0]
+        await auth.delete()
+        await shallow_user.delete()
+    user = await User.create(discord_username=user_data.username, discord_id=user_data.id, discord_avatar_url=user_data.avatar)
+    auth = await Authentication.create(web_token=Authentication.gen_token(), discord_token=shallow_auth.access_token, user=user)
+    return success(data={'web_token':auth.web_token, 'user':user})
 
 @app.get('/authorize/roblox')
 async def roblox_auth(code):
-    data:dict = await roblox_exchange_code(code)
-    if not (data.get('access_token')):
-        return success(False, message="Failed to obtain access token", data=data)
-    user = await get_roblox_user(data.get('access_token'))
-    
-    return user
+    shallow_auth:ShallowAuth = await roblox_exchange_code(code)
+    if not shallow_auth:
+        return success(False, message="Failed to obtain access token")
+    user = await get_roblox_user(shallow_auth.access_token)
+    return success()
