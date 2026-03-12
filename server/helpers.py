@@ -6,8 +6,8 @@ roblox_api = 'https://apis.roblox.com/oauth'
 redirect_uris = {
     'dev': '',
     'prod': '',
-    'discord_dev': 'http://localhost:8000/authorize/discord',
-    'roblox_dev': 'http://localhost:8000/authorize/roblox'
+    'discord_dev': 'http://localhost:3000/authorize/discord',
+    'roblox_dev': 'http://localhost:3000/authorize/roblox'
 }
 discord_redirect = redirect_uris['discord_dev']
 roblox_redirect = redirect_uris['roblox_dev']
@@ -69,6 +69,7 @@ async def roblox_exchange_code(code) -> ShallowAuth | None:
 
 async def discord_exchange_code(code) -> ShallowAuth | None:
     async with ClientSession() as session:
+        print(code)
         package = {
             'grant_type': 'authorization_code',
             'code': code,
