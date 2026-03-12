@@ -21,7 +21,7 @@ class DiscordUser:
     def __init__(self, data:dict):
         self.id = data.get('id')
         self.username = data.get('username')
-        self.avatar = f"https://cdn.discordapp.com/{self.id}/{data.get('avatar')}.webp"
+        self.avatar = f"https://cdn.discordapp.com/avatars/{self.id}/{data.get('avatar')}.webp"
         
 class RobloxUser:
     pass

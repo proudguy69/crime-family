@@ -7,6 +7,7 @@
 
 <script setup>
 import Header from './components/Header.vue';
+import discordAuthenticate from './utils/authenticate';
 //import UserInformation from './types/UserInformation';
 
 // varibles
@@ -42,7 +43,9 @@ provide('api_uri', api_uri)
 
 // methods
 onMounted(async () => {
-  // make call to backend to get user information
+  const web_token = localStorage.getItem('web_token')
+  if (!web_token) {return}
+  await discordAuthenticate(web_token, user_information)
 })
 
 </script>

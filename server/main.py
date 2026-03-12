@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 from models import *
@@ -48,3 +48,11 @@ async def roblox_auth(code):
         return success(False, message="Failed to obtain access token")
     user = await get_roblox_user(shallow_auth.access_token)
     return success()
+
+@app.get('/authenticate')
+async def authenticate(authorization:str=Header(None)):
+    auth = await Authentication.get_or_none(web_token=authorization)
+    if not auth:
+        return success(False, message="authentication not found")
+    user = await auth.user
+    return success(data={"user":user})

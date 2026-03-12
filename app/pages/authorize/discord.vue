@@ -1,6 +1,5 @@
 <template>
-    you are being redirected
-    {{ route.query.code }}
+    you are being redirected, please wait
 </template>
 
 <script setup lang="ts">
@@ -9,6 +8,7 @@ import {authorizeDiscord} from '~/utils/authorize'
 
 // varibles
 const route = useRoute()
+const router = useRouter()
 const code = route.query.code as string
 
 const api_uri = inject<Ref>('api_uri')!
@@ -22,6 +22,7 @@ onMounted(async () => {
     if (result) {
         console.log("auth failed?", result)
     }
+    router.push('/')
 })
 
 </script>

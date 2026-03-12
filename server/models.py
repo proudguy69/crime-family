@@ -6,7 +6,7 @@ class Authentication(Model):
     web_token = fields.TextField()
     discord_token = fields.TextField()
     roblox_refreshtoken = fields.TextField(null=True)
-    user = fields.ForeignKeyField('models.User', related_name='auth')
+    user:User = fields.ForeignKeyField('models.User', related_name='auth')
 
     @classmethod
     def gen_token(cls):
