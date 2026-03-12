@@ -23,7 +23,7 @@ class User(Model):
 
     roblox_username = fields.CharField(max_length=32, null=True)
     roblox_id = fields.IntField(null=True)
-    roblox_avatar_url = fields.IntField(null=True)
+    roblox_avatar_url = fields.TextField(null=True)
     auth = fields.ReverseRelation['Authentication']
 
 

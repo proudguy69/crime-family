@@ -3,9 +3,9 @@ export default interface UserInformation {
     discord_username: string|undefined
     discord_avatar_url: string|undefined
 
-    roblox_id: number|undefined
-    roblox_username: string|undefined
-    roblox_avatar_url: string|undefined
+    roblox_id: number|undefined|null
+    roblox_username: string|undefined|null
+    roblox_avatar_url: string|undefined|null
 
     web_token: string
 }

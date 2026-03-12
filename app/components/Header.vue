@@ -12,8 +12,25 @@
             >
                 Login
             </UButton>
+
             <UDropdownMenu
             :items="dropdownitems"
+            v-else-if="!user_information.roblox_id"
+            >
+                <UButton
+                variant="subtle"
+                color="neutral"
+                :avatar="{
+                    src: user_information.discord_avatar_url,
+                    loading: 'lazy'
+                }"
+                >
+                    {{ user_information.discord_username }}
+                </UButton>
+            </UDropdownMenu>
+
+            <UDropdownMenu
+            :items="dropdownitemsroblox"
             v-else
             >
                 <UButton
@@ -37,13 +54,17 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 import type UserInformation from '~/types/UserInformation';
 import type { DropdownMenuItem } from '@nuxt/ui'
 
+// injects
+const discord_auth = inject("discord_auth")!
+const user_information = inject<Ref<UserInformation>>("user_information")!
+const roblox_auth = inject<string>("roblox_auth")!
 
 // varibles
 const items = ref<NavigationMenuItem[]>([
 
 ])
 
-const dropdownitems =ref<DropdownMenuItem[]>([
+const dropdownitems = ref<DropdownMenuItem[]>([
     {
         'label': 'Logout',
         icon: 'line-md:logout',
@@ -51,12 +72,30 @@ const dropdownitems =ref<DropdownMenuItem[]>([
             localStorage.clear()
             user_information.value.discord_id = undefined
         },
+    },
+    {
+        label: 'Roblox Login',
+        icon: 'simple-icons:roblox',
+        to: roblox_auth
     }
 ])
 
-// injects
-const discord_auth = inject("discord_auth")!
-const user_information = inject<Ref<UserInformation>>("user_information")!
-
+const dropdownitemsroblox =computed<DropdownMenuItem[]>(() => [
+    {
+        'label': 'Logout',
+        icon: 'line-md:logout',
+        onSelect(e) {
+            localStorage.clear()
+            user_information.value.discord_id = undefined
+        },
+    },
+    {
+        label: user_information.value.roblox_username!,
+        avatar: {
+            src: user_information.value.roblox_avatar_url!
+        },
+        disabled: true
+    }
+])
 
 </script>

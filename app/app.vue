@@ -22,7 +22,7 @@ const api_uri = {
 }.dev
 
 const roblox_auth_uri = {
-  dev: 'https://apis.roblox.com/oauth/v1/authorize?client_id=2359556374392113378&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fauthorize%2Froblox&scope=openid%20profile&response_type=code',
+  dev: 'https://apis.roblox.com/oauth/v1/authorize?client_id=2359556374392113378&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauthorize%2Froblox&scope=openid%20profile&response_type=code',
   prod: ''
 }.dev
 

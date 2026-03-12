@@ -24,7 +24,10 @@ class DiscordUser:
         self.avatar = f"https://cdn.discordapp.com/avatars/{self.id}/{data.get('avatar')}.webp"
         
 class RobloxUser:
-    pass
+    def __init__(self, data:dict):
+        self.id = data.get('sub')
+        self.username = data.get('name')
+        self.avatar = data.get('picture')
 
 def success(state:bool=True, message:str=None, data:dict=None):
     response = {'success': state}
@@ -46,11 +49,16 @@ async def get_discord_user(access_token) -> DiscordUser|None:
         
         return DiscordUser(data)
 
-async def get_roblox_user(access_token):
+async def get_roblox_user(access_token) ->RobloxUser|None:
     async with ClientSession() as session:
         headers = {'Authorization': f'Bearer {access_token}'}
         response = await session.get(f'{roblox_api}/v1/userinfo', headers=headers)
-        return await response.json()
+        data:dict = await response.json()
+        print(data)
+        if not data.get('sub'):
+            print(data)
+
+        return RobloxUser(data)
 
 async def roblox_exchange_code(code) -> ShallowAuth | None:
     async with ClientSession() as session:

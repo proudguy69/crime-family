@@ -23,8 +23,21 @@ async function authorizeDiscord(code:string, api_uri:string, user_information:Re
     return
 }
 
-async function authorizeRoblox(code:string) {
-    
+async function authorizeRoblox(code:string, api_uri:string, user_information:Ref<UserInformation>) {
+    const web_token = localStorage.getItem('web_token')
+    if (!web_token) {
+        return "web_token not exists"
+    }
+    const headers = {'Authorization': web_token}
+    const response = await fetch(`http://localhost:8000/authorize/roblox?code=${code}`, {headers:headers})
+    const data:Response = await response.json()
+    if (!data.success) {
+        return data.message
+    }
+    user_information.value.roblox_id = data.user?.roblox_id
+    user_information.value.roblox_username = data.user?.roblox_username
+    user_information.value.roblox_avatar_url = data.user?.roblox_avatar_url
+    return 
 }
 
 export {authorizeDiscord, authorizeRoblox}

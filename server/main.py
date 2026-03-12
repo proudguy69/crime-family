@@ -42,12 +42,24 @@ async def discord_auth(code:str):
     return success(data={'web_token':auth.web_token, 'user':user})
 
 @app.get('/authorize/roblox')
-async def roblox_auth(code):
+async def roblox_auth(code, authorization:str=Header(None)):
+    auth = await Authentication.get_or_none(web_token=authorization)
+    if not auth:
+        return success(False, message="authentication not found")
+    user = await auth.user
+    if not user:
+        return success(False, "User not found!")
+    
     shallow_auth:ShallowAuth = await roblox_exchange_code(code)
     if not shallow_auth:
         return success(False, message="Failed to obtain access token")
-    user = await get_roblox_user(shallow_auth.access_token)
-    return success()
+    
+    roblox_user:RobloxUser = await get_roblox_user(shallow_auth.access_token)
+    user.roblox_id = roblox_user.id
+    user.roblox_username = roblox_user.username
+    user.roblox_avatar_url = roblox_user.avatar
+    await user.save()
+    return success(data={"user":user})
 
 @app.get('/authenticate')
 async def authenticate(authorization:str=Header(None)):
