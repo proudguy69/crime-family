@@ -34,6 +34,7 @@ async function authorizeRoblox(code:string, api_uri:string, user_information:Ref
     if (!data.success) {
         return data.message
     }
+    console.log(data)
     user_information.value.roblox_id = data.user?.roblox_id
     user_information.value.roblox_username = data.user?.roblox_username
     user_information.value.roblox_avatar_url = data.user?.roblox_avatar_url

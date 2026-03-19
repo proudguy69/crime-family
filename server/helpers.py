@@ -71,6 +71,7 @@ async def roblox_exchange_code(code) -> ShallowAuth | None:
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         response = await session.post(f'{roblox_api}/v1/token', headers=headers, data=package)
         data:dict = await response.json()
+        print(data)
         if not data.get('access_token'):
             return
         return ShallowAuth(data)

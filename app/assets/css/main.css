@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+@theme {
+    
+}
+
+.dark {
+    --ui-bg: var(--color-gray-800)
+}

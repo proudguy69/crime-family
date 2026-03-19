@@ -1,5 +1,9 @@
 <template>
-    <UHeader title="Famiglia Sangue">
+    <UHeader class="border-b border-gray-600">
+        <template #title>
+            <UAvatar src="/images/logo.png" text="Logo"/>
+            Famiglia Sangue
+        </template>
 
         <UNavigationMenu :items="items" />
 
