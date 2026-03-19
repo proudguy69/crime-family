@@ -7,10 +7,14 @@
 
         <UNavigationMenu :items="items" />
 
+        <template #body>
+            <UNavigationMenu :items="items" />
+        </template>
+
         <template #right>
             <UButton
             v-if="!user_information.discord_id"
-            :to="discord_auth"
+            :to="'/'"
             icon="ic:baseline-discord"
             class="bg-[#5865F2] text-[#E0E3FF] hover:bg-[#E0E3FF] hover:text-[#5865F2] active:bg-[#E0E3FF]"
             >
@@ -65,7 +69,17 @@ const roblox_auth = inject<string>("roblox_auth")!
 
 // varibles
 const items = ref<NavigationMenuItem[]>([
-
+    {
+        label: 'News',
+        to: '/news',
+        icon: 'material-symbols:breaking-news-outline'
+    },
+    {
+        label: 'Management',
+        to: '/management',
+        icon: 'lsicon:operation-outline',
+        disabled: true
+    }
 ])
 
 const dropdownitems = ref<DropdownMenuItem[]>([
@@ -80,7 +94,8 @@ const dropdownitems = ref<DropdownMenuItem[]>([
     {
         label: 'Roblox Login',
         icon: 'simple-icons:roblox',
-        to: roblox_auth
+        to: roblox_auth,
+        disabled: true
     }
 ])
 
